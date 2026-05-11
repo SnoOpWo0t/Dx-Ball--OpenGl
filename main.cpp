@@ -141,3 +141,112 @@ float ballSpeedNow() {
     }
     return s;
 }
+
+
+//core ball speed computation and integration with power-ups
+
+void drawText(float x, float y, const char* text, void* font = GLUT_BITMAP_HELVETICA_18) {
+    glRasterPos2f(x, y);
+    for (int i = 0; text[i] != '\0'; i++) {
+        glutBitmapCharacter(font, text[i]);
+    }
+}
+
+int textWidth(const char* text, void* font = GLUT_BITMAP_HELVETICA_18) {
+    int w = 0;
+    for (int i = 0; text[i] != '\0'; i++) {
+        w += glutBitmapWidth(font, text[i]);
+    }
+    return w;
+}
+
+void drawTextCenter(float cx, float y, const char* text, void* font = GLUT_BITMAP_HELVETICA_18) {
+    int w = textWidth(text, font);
+    drawText(cx - w * 0.5f, y, text, font);
+}
+
+void drawRect(float x, float y, float w, float h) {
+    glBegin(GL_QUADS);
+    glVertex2f(x, y);
+    glVertex2f(x + w, y);
+    glVertex2f(x + w, y + h);
+    glVertex2f(x, y + h);
+    glEnd();
+}
+
+void drawCircle(float cx, float cy, float r) {
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(cx, cy);
+    for (int i = 0; i <= 32; i++) {
+        float a = (2.0f * 3.1415926535f * i) / 32.0f;
+        glVertex2f(cx + cosf(a) * r, cy + sinf(a) * r);
+    }
+    glEnd();
+}
+
+// Feature: Rendering & UI helpers
+// Provided basic text/shape drawing utilities used by menus
+
+int circleRectHit(float cx, float cy, float cr, float rx, float ry, float rw, float rh) {
+    float nx = clampf(cx, rx, rx + rw);
+    float ny = clampf(cy, ry, ry + rh);
+    float dx = cx - nx;
+    float dy = cy - ny;
+    return (dx * dx + dy * dy) <= (cr * cr);
+}
+
+void sortScores() {
+    for (int i = 0; i < highCount; i++) {
+        for (int j = i + 1; j < highCount; j++) {
+            int swapNow = 0;
+            if (highscores[j].score > highscores[i].score) {
+                swapNow = 1;
+            } else if (highscores[j].score == highscores[i].score && highscores[j].timeSec < highscores[i].timeSec) {
+                swapNow = 1;
+            }
+            if (swapNow) {
+                ScoreLine t = highscores[i];
+                highscores[i] = highscores[j];
+                highscores[j] = t;
+            }
+        }
+    }
+}
+
+void loadScores() {
+    highCount = 0;
+    FILE* fp = fopen(scorePath, "r");
+    if (!fp) {
+        return;
+    }
+
+    while (highCount < MAX_SCORES) {
+        int s = 0;
+        float t = 0.0f;
+        if (fscanf(fp, "%d %f", &s, &t) != 2) {
+            break;
+        }
+        highscores[highCount].score = s;
+        highscores[highCount].timeSec = t;
+        highCount++;
+    }
+    fclose(fp);
+    sortScores();
+}
+
+void saveScores() {
+#ifdef _WIN32
+    _mkdir(".dist");
+#else
+    mkdir(".dist", 0755);
+#endif
+
+    FILE* fp = fopen(scorePath, "w");
+    if (!fp) {
+        return;
+    }
+    for (int i = 0; i < highCount; i++) {
+        fprintf(fp, "%d %.2f\n", highscores[i].score, highscores[i].timeSec);
+    }
+    fclose(fp);
+}
