@@ -1,0 +1,6 @@
+cd F:\Dx Ball -OpenGl\individual_parts
+cmake -S . -B build
+cmake --build build --target dx_ball_part1
+cmake --build build --target dx_ball_part2
+cmake --build build --target dx_ball_part3
+cmake --build build --target dx_ball_part4
