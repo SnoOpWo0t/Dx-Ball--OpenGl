@@ -1,6 +1,111 @@
 # DX Ball (OpenGL / FreeGLUT)
 
-A full-featured DX Ball style arcade game built in C++ with OpenGL and FreeGLUT.
+DX Ball is a modern, extended Breakout-style game implemented in one portable C++ source file. It uses FreeGLUT+OpenGL for rendering and simple Windows multimedia APIs for audio.
+
+Key features
+------------
+- 🎮 Gameplay: paddle & ball physics, responsive collisions, progressive speed ramp
+- 🧱 10 Brick types: Normal, Steel, Explosive, Moving, Invisible, Ice, Fire, Locked, Regenerating, Teleport
+- 🎁 9 Drop/Powerups: Extra Life, Speed Boost, Wide Paddle, Shield, Row Clear, Fireball, Multi-ball, Key, Bomb
+- ✨ Visuals: combo floating text, particle effects, screen shake, theme+weather backgrounds (nature, city, space, neon)
+- 🕹 Menus: multi-page menus (difficulty, maps, theme, weather, settings, help)
+- 💾 Persistence: per-map/difficulty highscores saved in `.dist/highscores.txt`
+- 🔊 Audio: background music and SFX (Windows MCI/winmm; WAV preferred for reliability)
+- 🧪 Debug: optional music debug log present for diagnosis
+
+Controls
+--------
+- Move paddle: `A` / `D` or Left/Right arrows or mouse
+- Launch ball: `Space` or left mouse click
+- Pause / Resume: `P`
+- Return to menu / Quit: `Esc` / `Q`
+- Use Key to unlock locked bricks: `K`
+- Menu navigation: `W` / `S`, `Enter` to select
+
+Project structure
+-----------------
+The important files and folders are:
+
+ - `main.cpp` — main game source (single-file game logic and rendering)
+ - `Dx Ball.exe` — compiled executable (if you built it)
+ - `Game Music/` — music and SFX assets used by the game
+ - `individual_parts/` — example parts / smaller entry points (`main_part1.cpp`, `main_part4.cpp`)
+ - `.dist/` — contains generated files at runtime (highscores, optional fallback music files)
+
+Build & Install
+---------------
+Clone from GitHub:
+
+```powershell
+git clone <your-repo-url>
+cd "Dx Ball -OpenGl"
+```
+
+Prerequisites:
+
+- A C++17-capable compiler (MinGW/g++, or Visual Studio)
+- FreeGLUT development headers and libraries
+- OpenGL (system-provided)
+- On Windows: `winmm` (part of OS; linked automatically)
+
+Option A — Quick manual build (MinGW / g++):
+
+```powershell
+g++ main.cpp -std=c++17 -lfreeglut -lopengl32 -lglu32 -lwinmm -o "Dx Ball.exe"
+./"Dx Ball.exe"
+```
+
+Option B — Build with CMake (recommended for multi-config):
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+# Executable path:
+# - MinGW/Ninja: build\dx_ball.exe
+# - Visual Studio: build\Release\dx_ball.exe
+```
+
+Option C — Run the individual example parts:
+
+```powershell
+cd individual_parts
+# Build & run main_part1
+g++ main_part1.cpp -std=c++17 -lfreeglut -lopengl32 -lglu32 -lwinmm -o part1.exe
+./part1.exe
+
+# Build & run main_part4
+g++ main_part4.cpp -std=c++17 -lfreeglut -lopengl32 -lglu32 -lwinmm -o part4.exe
+./part4.exe
+```
+
+Assets & Music
+--------------
+- Put WAV files in `Game Music/` for best reliability. The game looks for specific filenames (see source) and falls back to `.dist/` locations if present.
+- Preferred: `Game Music/Rigor Mormist (gameover music).wav` for game-over.
+- If music doesn't play, check `music_debug.log` for MCI errors (on Windows).
+
+Gameplay notes
+--------------
+- Highscore file is saved to `.dist/highscores.txt`. Ensure `.dist/` exists and is writable.
+- Locked bricks require the Key drop to unlock. Keys are rare — use `K` to consume a key when prompted.
+- Multi-ball and powerups interact with scoring; check HUD for active timers and multipliers.
+
+Troubleshooting
+---------------
+- Linker errors for FreeGLUT: install dev packages (MinGW-w64 / pacman/mingw, or vcpkg) and ensure library paths are available.
+- If `Dx Ball.exe` is locked while building, close any running instance.
+- If music is missing or corrupted, replace MP3 with WAV files in `Game Music/`.
+
+Contributing
+------------
+- Submit small PRs that keep features isolated. Major refactors should keep the `main.cpp` behaviour identical unless documented.
+
+License & Credits
+-----------------
+This project is provided as-is. Credit the original author when re-using assets or logic.
+
+Enjoy! 🎉
+
 
 ## Overview
 
