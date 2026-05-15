@@ -50,6 +50,7 @@ struct Brick {
     int linkedBrick;  // for teleport bricks
 };
 
+struct ScoreLine { int score; float timeSec; int mapCategory; int difficulty; };
 struct Drop {
     float x;
     float y;
@@ -57,7 +58,6 @@ struct Drop {
     float vy;
     int type;
     int active;
-};
 
 struct ScoreLine {
     int score;
@@ -66,12 +66,14 @@ struct ScoreLine {
     int difficulty;
 };
 
+};
+
 // map and difficulty
 int selectedDifficulty=DIFFICULTY_NORMAL, selectedMap=1, difficultyIndex=DIFFICULTY_NORMAL, mapIndex=1,
 selectedMapCategory=MAP_CAT_CLASSIC, mapCategoryIndex=MAP_CAT_CLASSIC, selectedWeather=WEATHER_SUNNY,
 weatherIndex=WEATHER_SUNNY, selectedTheme=THEME_NATURE, themeIndex=THEME_NATURE, selectedMapVariant=0;
 float mouseX=-1000.0f, mouseY=-1000.0f; int mouseVisible=0;
-float lightningTimer=0.0f, lightningDuration=0.15f, stormIntensity=0.0f, weatherTimer=0.0f;
+float lightningTimer=0.0f, lightningDuration=0.15f, stormIntensity=0.0f;
 int showLightning=0, winW=1000, winH=700, currentPage=PAGE_MENU, canResume=0, menuIndex=0;
 
 float paddleX=500.0f, paddleY=48.0f, paddleW=130.0f, paddleH=18.0f, paddleSpeed=560.0f;
@@ -785,7 +787,7 @@ void clearDrops(){for(int i=0;i<dropCount;i++)drops[i].active=0;}
 
 void newGame(){lives=3;score=0;playTimeSec=0;comboCount=0;comboTimer=fireballTimer=iceBallSlowTimer=fireBallSpeedTimer=shakeTimer=0;
 shakeIntensity=0;hasKey=0;keyAssistCooldown=0;speedRamp=1;speedRampNext=12;speedBoostTimer=wideTimer=shieldTimer=0;
-scoreSaved=0;weatherTimer=lightningTimer=0;showLightning=0;
+scoreSaved=0;lightningTimer=0;showLightning=0;
 float s[]={280,340,420,500};int l[]={5,3,2,2};baseBallSpeed=s[selectedDifficulty];lives=l[selectedDifficulty];
 dropCount=0;for(int i=0;i<MAX_EXTRA_BALLS;i++)extraBallActive[i]=0;
 for(int i=0;i<32;i++)ftexts[i].life=0;for(int i=0;i<128;i++)parts[i].life=0;setupBricks();resetBall();canResume=1;currentPage=PAGE_PLAY;}
@@ -793,6 +795,10 @@ for(int i=0;i<32;i++)ftexts[i].life=0;for(int i=0;i<128;i++)parts[i].life=0;setu
 void bombExplosion(float bx,float by){float r=100;for(int i=0;i<brickCount;i++){
 if(!bricks[i].alive)continue;float dx=(bricks[i].x+bricks[i].w*0.5f)-bx,dy=(bricks[i].y+bricks[i].h*0.5f)-by;
 float d=sqrtf(dx*dx+dy*dy);if(d<r){bricks[i].alive=0;score+=bricks[i].points*2;}}}
+    }
+}
+
+
 
 void applyDrop(int type) {
     if (type == DROP_LIFE) {
@@ -919,6 +925,7 @@ parts[i].x+=parts[i].vx*dt;parts[i].y+=parts[i].vy*dt;}}}
 
 void drawParticles(){for(int i=0;i<128;i++){if(parts[i].life>0){glColor4f(parts[i].r,parts[i].g,parts[i].b,clampf(parts[i].life,0,1));
 drawCircle(parts[i].x,parts[i].y,3);}}}
+}
 
 int hitBrickForBall(float *bxp, float *byp, float *bvx, float *bvy, Brick* b, float usedBallR) {
     if (!b->alive) return 0;
@@ -1602,6 +1609,8 @@ if(bricks[i].type==7&&bricks[i].isLocked){glColor3f(1,0.9f,0.3f);drawCircle(bric
 glColor3f(0.08f,0.08f,0.1f);glLineWidth(2);glBegin(GL_LINE_LOOP);
 glVertex2f(bricks[i].x,bricks[i].y);glVertex2f(bricks[i].x+bricks[i].w,bricks[i].y);
 glVertex2f(bricks[i].x+bricks[i].w,bricks[i].y+bricks[i].h);glVertex2f(bricks[i].x,bricks[i].y+bricks[i].h);glEnd();}}
+    }
+}
 
 void drawDrops(){float dc[][3]={{0.95f,0.36f,0.40f},{0.96f,0.72f,0.18f},{0.20f,0.78f,0.45f},{0.76f,0.95f,0.30f},
 {1.0f,0.48f,0.12f},{0.9f,0.5f,0.9f},{0.85f,0.20f,0.20f},{0.20f,0.60f,0.95f},{0.9f,0.5f,0.9f},{1.0f,0.85f,0.2f}};

@@ -1,6 +1,9 @@
 cd F:\Dx Ball -OpenGl\individual_parts
-cmake -S . -B build
-cmake --build build --target dx_ball_part1
-cmake --build build --target dx_ball_part2
-cmake --build build --target dx_ball_part3
-cmake --build build --target dx_ball_part4
+
+REM Compile and run main_part1.cpp
+g++ main_part1.cpp -std=c++17 -lfreeglut -lopengl32 -lglu32 -lwinmm -o part1.exe
+.\part1.exe
+
+REM Compile and run main_part4.cpp
+g++ main_part4.cpp -std=c++17 -lfreeglut -lopengl32 -lglu32 -lwinmm -o part4.exe
+.\part4.exe

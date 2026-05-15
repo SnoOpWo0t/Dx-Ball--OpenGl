@@ -1,6 +1,0 @@
-F:/Dx Ball -OpenGl/individual_parts/build/CMakeFiles/dx_ball_part1.dir
-F:/Dx Ball -OpenGl/individual_parts/build/CMakeFiles/dx_ball_part2.dir
-F:/Dx Ball -OpenGl/individual_parts/build/CMakeFiles/dx_ball_part3.dir
-F:/Dx Ball -OpenGl/individual_parts/build/CMakeFiles/dx_ball_part4.dir
-F:/Dx Ball -OpenGl/individual_parts/build/CMakeFiles/edit_cache.dir
-F:/Dx Ball -OpenGl/individual_parts/build/CMakeFiles/rebuild_cache.dir
