@@ -1,4 +1,3 @@
-
 // Brick-breaker with themed backgrounds, weather, 10 brick types,
 // 9 power/curse drops, multiball, combo system, persistent scoreboard.
 
